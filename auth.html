@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Market - Gateway Portal</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: #f7f9fa; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .auth-container { background: white; padding: 2.5rem; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); width: 100%; max-width: 400px; text-align: center; }
+        h1 { margin-bottom: 0.5rem; font-size: 1.75rem; }
+        h1 span { color: #2563eb; }
+        p { color: #6b7280; font-size: 0.9rem; margin-bottom: 1.5rem; }
+        .form-group { text-align: left; margin-bottom: 1.25rem; }
+        label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; }
+        input { width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; }
+        button { background-color: #2563eb; color: white; border: none; padding: 0.75rem; border-radius: 6px; font-size: 1rem; font-weight: 600; width: 100%; cursor: pointer; transition: background 0.2s; margin-top: 0.5rem; }
+        button:hover { background-color: #1d4ed8; }
+        .toggle-link { color: #2563eb; font-size: 0.85rem; margin-top: 1.5rem; cursor: pointer; display: inline-block; text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <div class="auth-container">
+        <h1 id="portalTitle">Log In to <span>CampusMarket</span></h1>
+        <p id="portalSubtitle">Enter your details below to access your shop workspace.</p>
+
+        <form id="authForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" required placeholder="Pick an account handle">
+            </div>
+            <div class="form-group" id="phoneFieldGroup" style="display: none;">
+                <label for="phone">Safaricom / Airtel Phone Number</label>
+                <input type="tel" id="phone" placeholder="e.g., 0712345678">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required placeholder="••••••••">
+            </div>
+            <button type="submit" id="submitBtn">Sign In</button>
+        </form>
+
+        <span class="toggle-link" id="togglePortal">Need an account? Register here</span>
+    </div>
+
+    <script>
+        let isLoginMode = true;
+        const portalTitle = document.getElementById('portalTitle');
+        const portalSubtitle = document.getElementById('portalSubtitle');
+        const submitBtn = document.getElementById('submitBtn');
+        const togglePortal = document.getElementById('togglePortal');
+        const authForm = document.getElementById('authForm');
+        const phoneFieldGroup = document.getElementById('phoneFieldGroup');
+
+        togglePortal.addEventListener('click', () => {
+            isLoginMode = !isLoginMode;
+            if (!isLoginMode) {
+                portalTitle.innerHTML = "Register on <span>CampusMarket</span>";
+                portalSubtitle.innerText = "Choose your custom credentials to begin trading.";
+                submitBtn.innerText = "Create Free Account";
+                togglePortal.innerText = "Already have an account? Log in here";
+                phoneFieldGroup.style.display = "block"; 
+                document.getElementById('phone').required = true;
+            } else {
+                portalTitle.innerHTML = "Log In to <span>CampusMarket</span>";
+                portalSubtitle.innerText = "Enter your details below to access your shop workspace.";
+                submitBtn.innerText = "Sign In";
+                togglePortal.innerText = "Need an account? Register here";
+                phoneFieldGroup.style.display = "none"; 
+                document.getElementById('phone').required = false;
+            }
+            authForm.reset();
+        });
+
+        authForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            let phone = document.getElementById('phone').value.trim();
+
+            // --- NEW: Phone Number Sanitizer ---
+            // If registering, clean the phone number to ensure WhatsApp links work perfectly
+            if (!isLoginMode && phone) {
+                phone = phone.replace(/\D/g, ''); // Strip out spaces or plus signs
+                if (phone.startsWith('0')) {
+                    phone = '254' + phone.substring(1); // Convert 07xx to 2547xx
+                } else if (phone.startsWith('7') || phone.startsWith('1')) {
+                    phone = '254' + phone; // Convert 7xx to 2547xx
+                }
+            }
+
+            const targetRoute = isLoginMode ? '/api/login' : '/api/register';
+            const payload = isLoginMode ? { username, password } : { username, password, phone };
+
+            fetch(`http://localhost:5000${targetRoute}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(res => {
+                if (!res.ok) {
+                    return res.json().then(err => { throw new Error(err.message || 'Server error') });
+                }
+                return res.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    if (isLoginMode) {
+                        sessionStorage.setItem('market_user_token', data.token);
+                        sessionStorage.setItem('market_username', data.username);
+                        window.location.href = 'index.html'; 
+                    } else {
+                        isLoginMode = false; 
+                        togglePortal.click(); 
+                    }
+                } else {
+                    alert(data.message || "Authentication failed.");
+                }
+            })
+            .catch(err => {
+                console.error("Connection Debug Error:", err);
+                alert(`Connection Error: ${err.message || "Cannot establish line link to server."}`);
+            });
+        });
+    </script>
+</body>
+</html>
