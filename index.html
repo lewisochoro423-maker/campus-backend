@@ -9,9 +9,9 @@
         body { background-color: #f7f9fa; color: #333; padding-bottom: 60px; }
         header { background-color: #ffffff; display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .logo { font-size: 1.5rem; font-weight: bold; }
-        .logo span { color: #2563eb; }
-        .btn-primary { background-color: #2563eb; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 6px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
-        .btn-primary:hover { background-color: #1d4ed8; }
+        .logo span { color: #2abb0d; }
+        .btn-primary { background-color: #2abb0d; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 6px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        .btn-primary:hover { background-color: #0b0c0c; }
         .search-container { text-align: center; padding: 3rem 1rem 2rem 1rem; }
         .search-container h1 { margin-bottom: 1.5rem; font-size: 2rem; }
         .search-bar { display: flex; justify-content: center; gap: 10px; max-width: 600px; margin: 0 auto; }
@@ -28,17 +28,17 @@
         .product-card:hover { transform: translateY(-5px); }
         .product-image { width: 100%; height: 180px; background-color: #e5e7eb; display: flex; align-items: center; justify-content: center; font-size: 3rem; }
         .product-info { padding: 1rem; }
-        .product-price { font-size: 1.25rem; font-weight: bold; color: #10b981; margin-bottom: 0.5rem; }
+        .product-price {font-size: 1.25rem; font-weight: bold; color: #2abb0d; margin-bottom: 0.5rem; }
         .product-title { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .product-location { font-size: 0.85rem; color: #6b7280; }
-        .btn-delete { background-color: #ef4444; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.85rem; font-weight: 600; cursor: pointer; margin-top: 0.75rem; width: 100%; transition: background 0.2s; }
-        .btn-delete:hover { background-color: #dc2626; }
+        .btn-delete { background-color: #2abb0d; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.85rem; font-weight: 600; cursor: pointer; margin-top: 0.75rem; width: 100%; }
+        .btn-delete:hover { background-color: #0e0d0d; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo">🏫 Campus<span>Market</span></div>
+        <div class="logo">🏫 Kibabii<span> CampusMarket</span></div>
         <nav><button class="btn-primary" id="toggleFormBtn">Post an Item</button></nav>
     </header>
 
@@ -59,49 +59,24 @@
         <section class="form-container" id="formWrapper">
             <h2>List Your Item For Sale</h2>
             <form id="itemForm">
-                <div class="form-group">
-                    <label for="itemTitle">Item Title / Name</label>
-                    <input type="text" id="itemTitle" required placeholder="e.g., Calculus 8th Edition">
-                </div>
-                <div class="form-group">
-                    <label for="itemPrice">Price (KSh)</label>
-                    <input type="text" id="itemPrice" required placeholder="e.g., 1,500">
-                </div>
-                <div class="form-group">
-                    <label for="itemCategory">Category</label>
-                    <select id="itemCategory">
-                        <option value="textbooks">Textbooks</option>
-                        <option value="electronics">Electronics</option>
-                        <option value="housing">Dorm/Hostel Gear</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="itemLocation">Pickup Location / Hostel</label>
-                    <input type="text" id="itemLocation" required placeholder="e.g., Hostel A Room 12">
-                </div>
-                <div class="form-group">
-                    <label for="itemImage">Upload Item Photo</label>
-                    <input type="file" id="itemImage" accept="image/*">
-                </div>
+                <div class="form-group"><label for="itemTitle">Item Title / Name</label><input type="text" id="itemTitle" required placeholder="e.g., Calculus 8th Edition"></div>
+                <div class="form-group"><label for="itemPrice">Price (KSh)</label><input type="text" id="itemPrice" required placeholder="e.g., 1,500"></div>
+                <div class="form-group"><label for="itemCategory">Category</label><select id="itemCategory"><option value="textbooks">Textbooks</option><option value="electronics">Electronics</option><option value="housing">Dorm/Hostel Gear</option></select></div>
+                <div class="form-group"><label for="itemLocation">Pickup Location / Hostel</label><input type="text" id="itemLocation" required placeholder="e.g., Hostel A Room 12"></div>
+                <div class="form-group"><label for="itemImage">Upload Item Photo</label><input type="file" id="itemImage" accept="image/*"></div>
 
-                <div class="form-group" style="background: #eff6ff; padding: 1rem; border-radius: 6px; border: 1px solid #bfdbfe; margin-top: 1rem;">
-                    <p style="font-size: 0.85rem; color: #1e40af; font-weight: bold; margin-bottom: 0.3rem;">🎁 Your 1st standard listing is 100% FREE!</p>
-                    <p style="font-size: 0.8rem; color: #4b5563; margin-bottom: 0.6rem;">Subsequent posts or Premium upgrades require a small fee.</p>
-                    
+                <div class="form-group" style="background: #2abb0d; padding: 1rem; border-radius: 6px; border: 1px solid #bfdbfe; margin-top: 1rem;">
+                    <p style="font-size: 0.85rem; color: #fff; font-weight: bold; margin-bottom: 0.3rem;">🎁 Your 1st standard listing is 100% FREE!</p>
+                    <p style="font-size: 0.8rem; color: #fff; margin-bottom: 0.6rem;">Subsequent posts or Premium upgrades require a small fee.</p>
                     <div style="margin-bottom: 0.8rem;">
-                        <label for="mpesaPhone" style="font-size: 0.85rem;">M-Pesa Phone Number (For Paid Listings)</label>
-                        <input type="text" id="mpesaPhone" placeholder="e.g., 0712345678" style="width: 100%; padding: 0.4rem; border: 1px solid #ccc; border-radius: 4px;">
+                        <label for="mpesaPhone" style="font-size: 0.85rem; color: white;">M-Pesa Phone Number</label>
+                        <input type="text" id="mpesaPhone" placeholder="0712345678" style="width: 100%; padding: 0.4rem; border: 1px solid #ccc; border-radius: 4px;">
                     </div>
-
-                    <div style="display: flex; align-items: center; gap: 10px; background: #ffffff; padding: 0.5rem; border-radius: 4px; border: 1px solid #d1d5db;">
+                    <div style="display: flex; align-items: center; gap: 10px; background: #e6e218; padding: 0.5rem; border-radius: 4px;">
                         <input type="checkbox" id="premiumCheckbox" style="width: auto; cursor: pointer;">
-                        <label for="premiumCheckbox" style="margin-bottom: 0; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
-                            🔥 Upgrade to Premium Position<br>
-                            <span style="font-size: 0.75rem; color: #6b7280; font-weight: normal;">Pins your item to the top row for fast sales!</span>
-                        </label>
+                        <label for="premiumCheckbox" style="margin-bottom: 0; cursor: pointer; font-size: 0.85rem; font-weight: 600;">🔥 Upgrade to Premium Position</label>
                     </div>
                 </div>
-
                 <button type="submit" class="btn-primary" style="width: 100%;">Submit Listing</button>
             </form>
         </section>
@@ -110,191 +85,105 @@
     </main>
 
     <script>
-        const productGrid = document.getElementById('productGrid');
-        const searchInput = document.getElementById('searchInput');
-        const categoryFilter = document.getElementById('categoryFilter');
-        const toggleFormBtn = document.getElementById('toggleFormBtn');
-        const formWrapper = document.getElementById('formWrapper');
-        const itemForm = document.getElementById('itemForm');
+       const productGrid = document.getElementById('productGrid');
+const formWrapper = document.getElementById('formWrapper');
+const itemForm = document.getElementById('itemForm');
+const toggleFormBtn = document.getElementById('toggleFormBtn');
+const activeUserToken = sessionStorage.getItem('market_user_token');
+const loggedInUser = sessionStorage.getItem('market_username');
 
-        const activeUserToken = sessionStorage.getItem('market_user_token');
-        const loggedInUser = sessionStorage.getItem('market_username');
+// Enforce login
+if (!activeUserToken) window.location.href = 'auth.html';
 
-        if (!activeUserToken) {
-            alert("🔒 Access Denied: You must register or log in first!");
-            window.location.href = 'auth.html';
-        }
+// 1. Display Products and handle WhatsApp logic
+function displayProducts(items) {
+    productGrid.innerHTML = "";
+    if (!items || items.length === 0) {
+        productGrid.innerHTML = `<p style="grid-column:1/-1; text-align:center; color:#6b7280; padding:2rem;">No items found.</p>`;
+        return;
+    }
 
-        function displayProducts(items) {
-            productGrid.innerHTML = ""; 
-            if(!items || items.length === 0) {
-                productGrid.innerHTML = `<p style="grid-column:1/-1; text-align:center; color:#6b7280; padding:2rem;">No items matching search.</p>`;
-                return;
-            }
+    items.forEach(product => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        
+        // Clean phone number for WhatsApp
+        let phone = (product.phone || "254700000000").replace(/\D/g, '');
+        if (phone.startsWith('0')) phone = '254' + phone.substring(1);
+        else if (phone.startsWith('7') || phone.startsWith('1')) phone = '254' + phone;
 
-            items.forEach(product => {
-                const card = document.createElement('div');
-                card.classList.add('product-card');
-                const emoji = product.category === 'textbooks' ? "📚" : product.category === 'electronics' ? "💻" : "🛏️";
-                
-                const imageContent = product.image 
-                    ? `<img src="${product.image}" style="width:100%; height:100%; object-fit:cover;">`
-                    : emoji;
+        card.innerHTML = `
+            ${product.image ? `<img src="${product.image}" style="width:100%; height:180px; object-fit:cover;">` : `<div class="product-image">📦</div>`}
+            <div class="product-info">
+                <div class="product-price">${product.price}</div>
+                <div class="product-title">${product.title} ${product.isPremium ? '🔥' : ''}</div>
+                <div class="product-location">📍 ${product.location}</div>
+                <span style="font-size:0.75rem; color:#9ca3af; display:block; margin:0.25rem 0;">Seller: ${product.username || 'unknown'}</span>
+                <form action="https://wa.me/${phone}" method="GET" target="_blank" style="margin-top:0.5rem;">
+                    <input type="hidden" name="text" value="Hi! I saw your item ${product.title} on CampusMarket. Is it available?">
+                    <button type="submit" class="btn-primary" style="width:100%; background-color:#22c55e;">💬 Chat on WhatsApp</button>
+                </form>
+                ${product.username === loggedInUser ? `<button class="btn-delete" onclick="deleteProduct('${product._id}')">Delete Listing</button>` : ''}
+            </div>
+        `;
+        productGrid.appendChild(card);
+    });
+}
 
-                let numberCleaned = (product.sellerPhone || "254712345678").toString().replace(/\D/g, '');
-                if (numberCleaned.startsWith('0')) numberCleaned = '254' + numberCleaned.substring(1);
-                else if (numberCleaned.startsWith('7') || numberCleaned.startsWith('1')) numberCleaned = '254' + numberCleaned;
+// 2. Fetch data
+function fetchProducts() {
+    fetch('/api/items')
+        .then(res => res.json())
+        .then(data => displayProducts(data.items || []))
+        .catch(err => console.error("Fetch Error:", err));
+}
 
-                const chatText = "Hi! I saw your item " + product.title + " on CampusMarket. Is it available?";
+// 3. Submit Form
+itemForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const reader = new FileReader();
+    const file = document.getElementById('itemImage').files[0];
+    
+    reader.onload = (ev) => {
+        const payload = { 
+            title: document.getElementById('itemTitle').value, 
+            price: document.getElementById('itemPrice').value, 
+            category: document.getElementById('itemCategory').value, 
+            location: document.getElementById('itemLocation').value, 
+            image: ev.target.result, 
+            isPremium: document.getElementById('premiumCheckbox').checked, 
+            phone: document.getElementById('mpesaPhone').value 
+        };
 
-                card.innerHTML = `
-                    <div class="product-image">${imageContent}</div>
-                    <div class="product-info">
-                        <div class="product-price">${product.price}</div>
-                        <div class="product-title">${product.title} ${product.isPremium ? '🔥' : ''}</div>
-                        <div class="product-location">📍 ${product.location}</div>
-                        <span style="font-size:0.75rem; color:#9ca3af; display:block; margin:0.25rem 0;">Seller: ${product.username || 'unknown'}</span>
-                        
-                        <form action="https://wa.me/${numberCleaned}" method="GET" target="_blank" style="margin-top:0.5rem;">
-                            <input type="hidden" name="text" value="${chatText}">
-                            <button type="submit" class="btn-primary" style="width:100%; background-color:#22c55e; font-size:0.9rem; border:none; cursor:pointer; padding:0.6rem;">
-                                💬 Chat on WhatsApp
-                            </button>
-                        </form>
-                        
-                        ${product.username === loggedInUser ? `<button class="btn-delete" onclick="deleteProduct('${product._id}')">Delete Listing</button>` : ''}
-                    </div>
-                `;
-                productGrid.appendChild(card);
-            });
-        }
+        fetch('/api/items', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${activeUserToken}` },
+            body: JSON.stringify(payload)
+        })
+        .then(res => res.json())
+        .then(data => {
+            alert(data.message || "Item listed successfully!");
+            fetchProducts();
+            itemForm.reset();
+            formWrapper.style.display = 'none';
+        })
+        .catch(err => alert("Submission failed."));
+    };
+    file ? reader.readAsDataURL(file) : reader.onload({target: {result: null}});
+});
 
-        function fetchProductsFromServer() {
-            fetch('http://localhost:5000/api/items')
-                .then(res => res.json())
-                .then(data => { displayProducts(data.items || []); })
-                .catch(err => console.error("Communication issue"));
-        }
+// 4. Utility Functions
+toggleFormBtn.addEventListener('click', () => {
+    formWrapper.style.display = formWrapper.style.display === 'block' ? 'none' : 'block';
+});
 
-        toggleFormBtn.addEventListener('click', () => {
-            formWrapper.style.display = formWrapper.style.display === "block" ? "none" : "block";
-            toggleFormBtn.innerText = formWrapper.style.display === "block" ? "Cancel" : "Post an Item";
-        });
+function deleteProduct(id) {
+    if(confirm("Delete this listing?")) {
+        fetch(`/api/items?id=${id}`, { method: 'DELETE', headers: {'Authorization': `Bearer ${activeUserToken}`} })
+        .then(() => fetchProducts());
+    }
+}
 
-        function sendPayloadToServer(title, finalPrice, category, location, imageSrc) {
-            fetch('http://localhost:5000/api/items', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${activeUserToken}`
-                },
-                body: JSON.stringify({ title, price: finalPrice, category, location, image: imageSrc })
-            })
-            .then(res => res.json())
-            .then(data => {
-                alert("Server says: " + data.message);
-                fetchProductsFromServer(); 
-                itemForm.reset();
-                formWrapper.style.display = "none";
-                toggleFormBtn.innerText = "Post an Item";
-            });
-        }
-
-        itemForm.addEventListener('submit', (e) => {
-            e.preventDefault(); 
-            const title = document.getElementById('itemTitle').value;
-            const rawPrice = document.getElementById('itemPrice').value;
-            const category = document.getElementById('itemCategory').value;
-            const location = document.getElementById('itemLocation').value;
-            const imageInput = document.getElementById('itemImage');
-            const isPremiumRequested = document.getElementById('premiumCheckbox').checked;
-            const mpesaPhone = document.getElementById('mpesaPhone').value;
-
-            let cleanNumber = rawPrice.replace(/\D/g, ''); 
-            let finalPrice = cleanNumber === "" ? "KSh " + rawPrice : "KSh " + parseInt(cleanNumber).toLocaleString();
-
-            function processImageAndSubmit(imageSrc) {
-                fetch(`http://localhost:5000/api/items?username=${activeUserToken}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        const currentPostCount = data.postCount || 0;
-
-                        if (currentPostCount === 0 && !isPremiumRequested) {
-                            // SCENARIO 1: Truly Free (1st post, standard)
-                            alert("🎉 Awesome! This is your first post, so it is 100% FREE. Welcome to CampusMarket!");
-                            sendPayloadToServer(title, finalPrice, category, location, imageSrc);
-                        } else {
-                            // SCENARIO 2: Requires Payment
-                            if (!mpesaPhone) {
-                                alert("⚠️ Please enter your M-Pesa Phone Number to proceed with a paid listing.");
-                                return;
-                            }
-
-                            // Send payment request to Daraja
-                            fetch('http://localhost:5000/api/mpesa-pay', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ phone: mpesaPhone, isPremium: isPremiumRequested })
-                            })
-                            .then(res => res.json())
-                            .then(paymentResponse => {
-                                if (paymentResponse.success) {
-                                    // SECURITY FIX: We alert them and STOP. We do NOT call sendPayloadToServer here!
-                                    alert("📲 Check your phone!\n\nSafaricom is asking for your PIN. In a live environment, your item will be published automatically once our server receives the payment receipt from Safaricom.");
-                                    itemForm.reset();
-                                    formWrapper.style.display = "none";
-                                    toggleFormBtn.innerText = "Post an Item";
-                                } else {
-                                    alert("Payment Gateway Error: " + paymentResponse.message);
-                                }
-                            });
-                        }
-                    });
-            }
-
-            if (imageInput.files && imageInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    processImageAndSubmit(event.target.result);
-                };
-                reader.readAsDataURL(imageInput.files[0]);
-            } else {
-                processImageAndSubmit(null);
-            }
-        });
-
-        function deleteProduct(id) {
-            if (!confirm("Delete this listing?")) return;
-            fetch(`http://localhost:5000/api/items?id=${id}`, {
-                method: 'DELETE',
-                headers: { 'Authorization': `Bearer ${activeUserToken}` }
-            })
-            .then(res => res.json())
-            .then(data => {
-                alert("Server Feedback: " + data.message);
-                fetchProductsFromServer();
-            });
-        }
-
-        function filterProducts() {
-            const searchText = searchInput.value.toLowerCase();
-            const selectedCategory = categoryFilter.value;
-            fetch('http://localhost:5000/api/items')
-                .then(res => res.json())
-                .then(data => {
-                    const serverItems = data.items || [];
-                    const filtered = serverItems.filter(product => {
-                        const matchesSearch = product.title.toLowerCase().includes(searchText);
-                        const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
-                        return matchesSearch && matchesCategory;
-                    });
-                    displayProducts(filtered);
-                });
-        }
-
-        searchInput.addEventListener('input', filterProducts);
-        categoryFilter.addEventListener('change', filterProducts);
-        fetchProductsFromServer();
-    </script>
+fetchProducts();  </script>
 </body>
 </html>

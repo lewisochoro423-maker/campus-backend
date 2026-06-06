@@ -3,7 +3,6 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-
 const PORT = process.env.PORT || 5000;
 
 // Central mock database arrays stored in server memory
@@ -148,6 +147,7 @@ const server = http.createServer((req, res) => {
         res.end(JSON.stringify({ success: true, items: enrichedItems }));
         return;
     }
+
     // =========================================================================
     // ROUTE 6: SECURE SUBMIT LISTING
     // =========================================================================
@@ -196,59 +196,30 @@ const server = http.createServer((req, res) => {
     }
 
     // =========================================================================
-    // ROUTE 7: DYNAMIC M-PESA CHECKOUT TIERS
+    // ROUTE 7: TEMPORARY FREE BETA UPGRADE
     // =========================================================================
     if (pathname === '/api/mpesa-pay' && req.method === 'POST') {
         let body = '';
         req.on('data', chunk => { body += chunk.toString(); });
         req.on('end', () => {
             try {
-                const payData = JSON.parse(body);
-                console.log(`💸 M-Pesa Request: Processing premium upgrade for phone number: ${payData.phone}`);
+                // In the future, this is where Safaricom code goes.
+                // For now, we auto-approve the premium request for the Beta!
+                console.log(`🎉 FREE BETA: Auto-upgrading listing to Premium!`);
 
                 res.writeHead(200, { 'Content-Type': 'application/json' });
                 res.end(JSON.stringify({ 
                     success: true, 
-                    message: "STK Push Initialized successfully! Enter M-Pesa PIN on your phone to complete payment." 
+                    message: "Beta Launch Special: Your item has been upgraded to Premium for FREE!" 
                 }));
             } catch (e) {
                 res.writeHead(400, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({ success: false, message: "Payment initialization failed." }));
+                res.end(JSON.stringify({ success: false, message: "Upgrade failed." }));
             }
         });
         return;
     }
-// =========================================================================
-    // ROUTE 7.5: M-PESA WEBHOOK (RECEIVING THE RECEIPT)
-    // =========================================================================
-    if (pathname === '/api/mpesa-webhook' && req.method === 'POST') {
-        let body = '';
-        req.on('data', chunk => { body += chunk.toString(); });
-        req.on('end', () => {
-            try {
-                const callbackData = JSON.parse(body);
-                const result = callbackData.Body.stkCallback;
 
-                if (result.ResultCode === 0) {
-                    // Payment was successful!
-                    console.log(`✅ Payment Received Successfully! Receipt Number: ${result.CallbackMetadata.Item[1].Value}`);
-                    // Here, we would update the SQLite database to mark the specific item as "Premium"
-                } else {
-                    // Payment failed or was cancelled by the user
-                    console.log(`❌ Payment Failed or Cancelled: ${result.ResultDesc}`);
-                }
-
-                // Always send a success response back to Safaricom so they stop pinging you
-                res.writeHead(200, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({ ResultCode: 0, ResultDesc: "Success" }));
-            } catch (e) {
-                console.error("Webhook processing error.");
-                res.writeHead(400, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({ error: "Invalid payload" }));
-            }
-        });
-        return;
-    }
     // =========================================================================
     // ROUTE 8: SECURE OWNERSHIP DELETE VALIDATION
     // =========================================================================
