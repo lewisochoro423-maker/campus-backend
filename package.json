@@ -1,0 +1,16 @@
+{
+  "name": "campus-backend",
+  "version": "1.0.0",
+  "description": "Backend for Campus Market",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "install": "npm install"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^7.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0"
+  }
+}
