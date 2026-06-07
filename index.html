@@ -52,6 +52,10 @@
                     <option value="textbooks">Textbooks</option>
                     <option value="electronics">Electronics</option>
                     <option value="housing">Dorm/Hostel Gear</option>
+                    <option value="furniture">Furniture</option>
+                    <option value="clothes">Clothes</option>
+                    <option value="foodstuff">Foodstuff</option>
+                    <option value="other">Other</option>
                 </select>
             </div>
         </section>
@@ -61,7 +65,18 @@
             <form id="itemForm">
                 <div class="form-group"><label for="itemTitle">Item Title / Name</label><input type="text" id="itemTitle" required placeholder="e.g., Calculus 8th Edition"></div>
                 <div class="form-group"><label for="itemPrice">Price (KSh)</label><input type="text" id="itemPrice" required placeholder="e.g., 1,500"></div>
-                <div class="form-group"><label for="itemCategory">Category</label><select id="itemCategory"><option value="textbooks">Textbooks</option><option value="electronics">Electronics</option><option value="housing">Dorm/Hostel Gear</option></select></div>
+                <div class="form-group">
+                    <label for="itemCategory">Category</label>
+                    <select id="itemCategory">
+                        <option value="textbooks">Textbooks</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="housing">Dorm/Hostel Gear</option>
+                        <option value="furniture">Furniture</option>
+                        <option value="clothes">Clothes</option>
+                        <option value="foodstuff">Foodstuff</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
                 <div class="form-group"><label for="itemLocation">Pickup Location / Hostel</label><input type="text" id="itemLocation" required placeholder="e.g., Hostel A Room 12"></div>
                 <div class="form-group"><label for="itemImage">Upload Item Photo</label><input type="file" id="itemImage" accept="image/*"></div>
 
@@ -85,105 +100,155 @@
     </main>
 
     <script>
-       const productGrid = document.getElementById('productGrid');
-const formWrapper = document.getElementById('formWrapper');
-const itemForm = document.getElementById('itemForm');
-const toggleFormBtn = document.getElementById('toggleFormBtn');
-const activeUserToken = sessionStorage.getItem('market_user_token');
-const loggedInUser = sessionStorage.getItem('market_username');
+        const productGrid = document.getElementById('productGrid');
+        const formWrapper = document.getElementById('formWrapper');
+        const itemForm = document.getElementById('itemForm');
+        const toggleFormBtn = document.getElementById('toggleFormBtn');
+        const activeUserToken = sessionStorage.getItem('market_user_token');
+        const loggedInUser = sessionStorage.getItem('market_username');
 
-// Enforce login
-if (!activeUserToken) window.location.href = 'auth.html';
+        // Enforce login
+        if (!activeUserToken) window.location.href = 'auth.html';
 
-// 1. Display Products and handle WhatsApp logic
-function displayProducts(items) {
-    productGrid.innerHTML = "";
-    if (!items || items.length === 0) {
-        productGrid.innerHTML = `<p style="grid-column:1/-1; text-align:center; color:#6b7280; padding:2rem;">No items found.</p>`;
-        return;
-    }
+        // 1. Display Products and handle WhatsApp logic
+        function displayProducts(items) {
+            productGrid.innerHTML = "";
+            if (!items || items.length === 0) {
+                productGrid.innerHTML = `<p style="grid-column:1/-1; text-align:center; color:#6b7280; padding:2rem;">No items found.</p>`;
+                return;
+            }
 
-    items.forEach(product => {
-        const card = document.createElement('div');
-        card.className = 'product-card';
-        
-        // Clean phone number for WhatsApp
-        let phone = (product.phone || "254700000000").replace(/\D/g, '');
-        if (phone.startsWith('0')) phone = '254' + phone.substring(1);
-        else if (phone.startsWith('7') || phone.startsWith('1')) phone = '254' + phone;
+            items.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                
+                // Clean phone number for WhatsApp
+                let phone = (product.phone || "254700000000").replace(/\D/g, '');
+                if (phone.startsWith('0')) phone = '254' + phone.substring(1);
+                else if (phone.startsWith('7') || phone.startsWith('1')) phone = '254' + phone;
 
-        card.innerHTML = `
-            ${product.image ? `<img src="${product.image}" style="width:100%; height:180px; object-fit:cover;">` : `<div class="product-image">📦</div>`}
-            <div class="product-info">
-                <div class="product-price">${product.price}</div>
-                <div class="product-title">${product.title} ${product.isPremium ? '🔥' : ''}</div>
-                <div class="product-location">📍 ${product.location}</div>
-                <span style="font-size:0.75rem; color:#9ca3af; display:block; margin:0.25rem 0;">Seller: ${product.username || 'unknown'}</span>
-                <form action="https://wa.me/${phone}" method="GET" target="_blank" style="margin-top:0.5rem;">
-                    <input type="hidden" name="text" value="Hi! I saw your item ${product.title} on CampusMarket. Is it available?">
-                    <button type="submit" class="btn-primary" style="width:100%; background-color:#22c55e;">💬 Chat on WhatsApp</button>
-                </form>
-                ${product.username === loggedInUser ? `<button class="btn-delete" onclick="deleteProduct('${product._id}')">Delete Listing</button>` : ''}
-            </div>
-        `;
-        productGrid.appendChild(card);
-    });
-}
+                card.innerHTML = `
+                    ${product.image ? `<img src="${product.image}" style="width:100%; height:180px; object-fit:cover;">` : `<div class="product-image">📦</div>`}
+                    <div class="product-info">
+                        <div class="product-price">${product.price}</div>
+                        <div class="product-title">${product.title} ${product.isPremium ? '🔥' : ''}</div>
+                        <div class="product-location">📍 ${product.location}</div>
+                        <span style="font-size:0.75rem; color:#9ca3af; display:block; margin:0.25rem 0;">Seller: ${product.username || 'unknown'}</span>
+                        <form action="https://wa.me/${phone}" method="GET" target="_blank" style="margin-top:0.5rem;">
+                            <input type="hidden" name="text" value="Hi! I saw your item ${product.title} on CampusMarket. Is it available?">
+                            <button type="submit" class="btn-primary" style="width:100%; background-color:#22c55e;">💬 Chat on WhatsApp</button>
+                        </form>
+                        ${product.username === loggedInUser ? `<button class="btn-delete" onclick="deleteProduct('${product._id}')">Delete Listing</button>` : ''}
+                    </div>
+                `;
+                productGrid.appendChild(card);
+            });
+        }
 
-// 2. Fetch data
-function fetchProducts() {
-    fetch('/api/items')
-        .then(res => res.json())
-        .then(data => displayProducts(data.items || []))
-        .catch(err => console.error("Fetch Error:", err));
-}
+        // 2. Fetch data
+        function fetchProducts() {
+            fetch('/api/items')
+                .then(res => res.json())
+                .then(data => displayProducts(data.items || []))
+                .catch(err => console.error("Fetch Error:", err));
+        }
 
-// 3. Submit Form
-itemForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const reader = new FileReader();
-    const file = document.getElementById('itemImage').files[0];
-    
-    reader.onload = (ev) => {
-        const payload = { 
-            title: document.getElementById('itemTitle').value, 
-            price: document.getElementById('itemPrice').value, 
-            category: document.getElementById('itemCategory').value, 
-            location: document.getElementById('itemLocation').value, 
-            image: ev.target.result, 
-            isPremium: document.getElementById('premiumCheckbox').checked, 
-            phone: document.getElementById('mpesaPhone').value 
-        };
+        // Helper function to handle submission payload
+        function sendPayload(imageData) {
+            const payload = { 
+                title: document.getElementById('itemTitle').value, 
+                price: document.getElementById('itemPrice').value, 
+                category: document.getElementById('itemCategory').value, 
+                location: document.getElementById('itemLocation').value, 
+                image: imageData, 
+                isPremium: document.getElementById('premiumCheckbox').checked, 
+                phone: document.getElementById('mpesaPhone').value 
+            };
 
-        fetch('/api/items', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${activeUserToken}` },
-            body: JSON.stringify(payload)
-        })
-        .then(res => res.json())
-        .then(data => {
-            alert(data.message || "Item listed successfully!");
-            fetchProducts();
-            itemForm.reset();
-            formWrapper.style.display = 'none';
-        })
-        .catch(err => alert("Submission failed."));
-    };
-    file ? reader.readAsDataURL(file) : reader.onload({target: {result: null}});
-});
+            fetch('/api/items', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${activeUserToken}` },
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message || "Item listed successfully!");
+                fetchProducts();
+                itemForm.reset();
+                formWrapper.style.display = 'none';
+                toggleFormBtn.textContent = 'Post an Item';
+                toggleFormBtn.style.backgroundColor = '#2abb0d';
+            })
+            .catch(err => alert("Submission failed."));
+        }
 
-// 4. Utility Functions
-toggleFormBtn.addEventListener('click', () => {
-    formWrapper.style.display = formWrapper.style.display === 'block' ? 'none' : 'block';
-});
+        // 3. Submit Form with Client-side Compression for Mobile/Laptop Reliability
+        itemForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const file = document.getElementById('itemImage').files[0];
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        // Max constraints for web safety
+                        const MAX_WIDTH = 800;
+                        const MAX_HEIGHT = 800;
+                        let width = img.width;
+                        let height = img.height;
 
-function deleteProduct(id) {
-    if(confirm("Delete this listing?")) {
-        fetch(`/api/items?id=${id}`, { method: 'DELETE', headers: {'Authorization': `Bearer ${activeUserToken}`} })
-        .then(() => fetchProducts());
-    }
-}
+                        if (width > height) {
+                            if (width > MAX_WIDTH) {
+                                height *= MAX_WIDTH / width;
+                                width = MAX_WIDTH;
+                            }
+                        } else {
+                            if (height > MAX_HEIGHT) {
+                                width *= MAX_HEIGHT / height;
+                                height = MAX_HEIGHT;
+                            }
+                        }
 
-fetchProducts();  </script>
+                        const canvas = document.createElement('canvas');
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        // Compress down to 70% quality JPEG format
+                        const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
+                        sendPayload(compressedDataUrl);
+                    };
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                sendPayload(null);
+            }
+        });
+
+        // 4. Utility Functions (Includes dynamic Post/Cancel string updates)
+        toggleFormBtn.addEventListener('click', () => {
+            if (formWrapper.style.display === 'block') {
+                formWrapper.style.display = 'none';
+                toggleFormBtn.textContent = 'Post an Item';
+                toggleFormBtn.style.backgroundColor = '#2abb0d';
+            } else {
+                formWrapper.style.display = 'block';
+                toggleFormBtn.textContent = 'Cancel';
+                toggleFormBtn.style.backgroundColor = '#dc2626'; // Sets button red on cancel state
+            }
+        });
+
+        function deleteProduct(id) {
+            if(confirm("Delete this listing?")) {
+                fetch(`/api/items?id=${id}`, { method: 'DELETE', headers: {'Authorization': `Bearer ${activeUserToken}`} })
+                .then(() => fetchProducts());
+            }
+        }
+
+        fetchProducts();
+    </script>
 </body>
 </html>
