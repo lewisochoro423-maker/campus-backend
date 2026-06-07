@@ -10,7 +10,8 @@ const PORT = process.env.PORT || 5000;
 // MONGODB CONNECTION SETUP
 // =========================================================================
 // Use Render's environment variables. Fallback to local string if testing locally.
-const MONGO_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/campusmarket";
+// Replace line 12 with this line:
+const MONGO_URI = process.env.MONGO_URL || process.env.MONGODB_URI || process.env.MONGO_URI || "mongodb://localhost:27017/campusmarket";
 
 mongoose.connect(MONGO_URI)
     .then(() => console.log("🔌 Connected to MongoDB Atlas successfully!"))
