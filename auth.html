@@ -98,11 +98,13 @@
                 if (data.success) {
                     alert(data.message);
                     if (isLoginMode) {
+                        // Securely save credentials to session storage
                         sessionStorage.setItem('market_user_token', data.token);
                         sessionStorage.setItem('market_username', data.username);
                         window.location.href = 'index.html'; 
                     } else {
-                        isLoginMode = true;
+                        // FIX: Just click the portal toggle directly. 
+                        // Since isLoginMode was false, this automatically triggers the transition back to true!
                         togglePortal.click();
                     }
                 } else {
