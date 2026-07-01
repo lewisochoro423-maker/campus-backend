@@ -1,18 +1,15 @@
-// Load built-in Node.js system utilities
+const dns = require('dns');
+dns.setServers(['8.8.8.8', '8.8.4.4']);// Load built-in Node.js system utilities
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const mongoose = require('mongoose'); // 🔌 Added Mongoose for Database Persistence
-
 const PORT = process.env.PORT || 5000;
 
 // =========================================================================
 // MONGODB CONNECTION SETUP
 // =========================================================================
-// Use Render's environment variables. Fallback to local string if testing locally.
-// Replace line 12 with this line:
-const MONGO_URI = process.env.MONGO_URL || process.env.MONGODB_URI || process.env.MONGO_URI || "mongodb://localhost:27017/campusmarket";
-
+const MONGO_URI = process.env.MONGO_URL || process.env.MONGODB_URI || process.env.MONGO_URI ||"mongodb+srv://lewisochoro423_db_user:lewis10278@campusmarketcluster.xrxnsct.mongodb.net/?appName=CampusmarketCluster";
 mongoose.connect(MONGO_URI)
     .then(() => console.log("🔌 Connected to MongoDB Atlas successfully!"))
     .catch(err => console.error("❌ MongoDB connection failure:", err));
@@ -38,13 +35,11 @@ const itemSchema = new mongoose.Schema({
 });
 const Item = mongoose.model('Item', itemSchema);
 
-
 const server = http.createServer((req, res) => {
     // SECURITY HANDSHAKE: Allow browser communications locally across ports
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-User-Token');
-
     if (req.method === 'OPTIONS') { 
         res.writeHead(200); 
         res.end(); 
@@ -53,7 +48,6 @@ const server = http.createServer((req, res) => {
 
     const parsedUrl = new URL(req.url, `http://localhost:${PORT}`);
     const pathname = parsedUrl.pathname;
-
     if (pathname === '/favicon.ico') {
         res.writeHead(204);
         res.end();
@@ -66,7 +60,6 @@ const server = http.createServer((req, res) => {
     if (pathname === '/' || pathname === '/index.html' || pathname === '/auth.html') {
         const filename = (pathname === '/' || pathname === '/index.html') ? 'index.html' : 'auth.html';
         const targetPath = path.join(__dirname, filename);
-
         fs.readFile(targetPath, (err, content) => {
             if (err) {
                 res.writeHead(500, { 'Content-Type': 'text/plain' });
@@ -93,8 +86,6 @@ const server = http.createServer((req, res) => {
                     res.end(JSON.stringify({ success: false, message: "Missing required fields!" }));
                     return;
                 }
-
-                // Query MongoDB case-insensitively to see if username is already taken
                 const usernameClean = data.username.trim();
                 const exists = await User.findOne({ username: new RegExp(`^${usernameClean}$`, 'i') });
                 
@@ -103,15 +94,12 @@ const server = http.createServer((req, res) => {
                     res.end(JSON.stringify({ success: false, message: "Username taken! Please log in instead." }));
                     return;
                 }
-
-                // Save permanent new account to MongoDB Atlas
                 const newUser = new User({
                     username: usernameClean,
                     password: data.password,
                     phone: data.phone.replace(/[^0-9]/g, '')
                 });
                 await newUser.save();
-
                 console.log(`👤 Database Saved: ${newUser.username}`);
                 res.writeHead(201, { 'Content-Type': 'application/json' });
                 res.end(JSON.stringify({ success: true, message: "Account created successfully!" }));
@@ -122,8 +110,7 @@ const server = http.createServer((req, res) => {
         });
         return;
     }
-
-    // =========================================================================
+   // =========================================================================
     // ROUTE 4: DYNAMIC USER LOGIN (Verifies Against Database Records)
     // =========================================================================
     if (pathname === '/api/login' && req.method === 'POST') {
@@ -133,13 +120,11 @@ const server = http.createServer((req, res) => {
             try {
                 const credentials = JSON.parse(body);
                 const userClean = credentials.username ? credentials.username.trim() : '';
-
                 // Locate profile in MongoDB database matching details
                 const user = await User.findOne({ 
                     username: new RegExp(`^${userClean}$`, 'i'), 
                     password: credentials.password 
                 });
-
                 if (user) {
                     res.writeHead(200, { 'Content-Type': 'application/json' });
                     res.end(JSON.stringify({ 
@@ -161,12 +146,10 @@ const server = http.createServer((req, res) => {
     }
 
     // =========================================================================
-    // ROUTE 5: PRODUCT GETTING & INTELLIGENT POST COUNT CHECKING
+    // ROUTE 5: HIGH-SPEED PRODUCT GETTING & POST COUNT LOOKUPS
     // =========================================================================
     if (pathname.startsWith('/api/items') && req.method === 'GET') {
         const userToCheck = parsedUrl.searchParams.get('username');
-
-        // Wrap logic inside an async execution wrapper
         (async () => {
             try {
                 if (userToCheck) {
@@ -175,13 +158,20 @@ const server = http.createServer((req, res) => {
                     res.end(JSON.stringify({ success: true, postCount: userPostCount }));
                     return;
                 }
-
+                
                 // Get all database items sorted newest first
                 const databaseItems = await Item.find().sort({ createdAt: -1 });
+                
+                // PERFORMANCE FIX: Fetch all phone records once to prevent server lag loops
+                const allUsers = await User.find({}, 'username phone');
+                const userPhoneMap = {};
+                allUsers.forEach(u => {
+                    userPhoneMap[u.username.toLowerCase()] = u.phone;
+                });
 
-                // Cross-reference user documents to pull correct cellular contacts dynamically
-                const enrichedItems = await Promise.all(databaseItems.map(async (item) => {
-                    const sellerInfo = await User.findOne({ username: item.username });
+                // Map items instantly out of the memory table
+                const enrichedItems = databaseItems.map(item => {
+                    const sellerLower = item.username ? item.username.toLowerCase() : '';
                     return {
                         _id: item._id,
                         title: item.title,
@@ -191,9 +181,9 @@ const server = http.createServer((req, res) => {
                         isPremium: item.isPremium,
                         username: item.username,
                         image: item.image,
-                        phone: sellerInfo ? sellerInfo.phone : "254712345678"
+                        phone: userPhoneMap[sellerLower] || "254712345678"
                     };
-                }));
+                });
 
                 res.writeHead(200, { 'Content-Type': 'application/json' });
                 res.end(JSON.stringify({ success: true, items: enrichedItems }));
@@ -204,20 +194,17 @@ const server = http.createServer((req, res) => {
         })();
         return;
     }
-
-    // =========================================================================
+   // =========================================================================
     // ROUTE 6: SECURE SUBMIT LISTING (Saves directly to MongoDB Collection)
     // =========================================================================
     if (pathname === '/api/items' && req.method === 'POST') {
         const authHeader = req.headers['authorization'];
-        const currentUser = authHeader && authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : null;
-
+        const currentUser = authHeader && authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : null; // FIX: Restored [1] index string splitter placement safely
         if (!currentUser) {
             res.writeHead(401, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ success: false, message: "Unauthorized! Missing user session token." }));
             return;
         }
-
         let body = '';
         req.on('data', chunk => { body += chunk.toString(); });
         req.on('end', async () => {
@@ -228,8 +215,6 @@ const server = http.createServer((req, res) => {
                     res.end(JSON.stringify({ success: false, message: "Missing required core product fields!" }));
                     return;
                 }
-
-                // Save product structure cleanly into database collection matching images
                 const newItem = new Item({
                     title: data.title,
                     price: data.price,
@@ -237,7 +222,7 @@ const server = http.createServer((req, res) => {
                     location: data.location,
                     isPremium: data.isPremium || false,
                     username: currentUser,
-                    image: data.image // Image file data correctly saved here
+                    image: data.image
                 });
                 
                 await newItem.save();
@@ -261,7 +246,7 @@ const server = http.createServer((req, res) => {
         req.on('data', chunk => { body += chunk.toString(); });
         req.on('end', () => {
             try {
-                console.log(`🎉 FREE BETA: Auto-upgrading listing to Premium!`);
+                console.log("🎉 FREE BETA: Auto-upgrading listing to Premium!");
                 res.writeHead(200, { 'Content-Type': 'application/json' });
                 res.end(JSON.stringify({ 
                     success: true, 
@@ -280,26 +265,21 @@ const server = http.createServer((req, res) => {
     // =========================================================================
     if (pathname.startsWith('/api/items') && req.method === 'DELETE') {
         const authHeader = req.headers['authorization'];
-        const currentUser = authHeader && authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : null;
-
+        const currentUser = authHeader && authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : null; // FIX: Restored [1] index string splitter placement safely
         const idToDelete = parsedUrl.searchParams.get('id'); 
-
         (async () => {
             try {
                 const targetItem = await Item.findById(idToDelete);
-
                 if (!targetItem) {
                     res.writeHead(404, { 'Content-Type': 'application/json' });
                     res.end(JSON.stringify({ success: false, message: "Listing not found on campus registry." }));
                     return;
                 }
-
                 if (targetItem.username !== currentUser) {
                     res.writeHead(403, { 'Content-Type': 'application/json' });
                     res.end(JSON.stringify({ success: false, message: "Access Denied: You do not own this campus listing!" }));
                     return;
                 }
-
                 await Item.findByIdAndDelete(idToDelete);
                 console.log(`🗑️ Database deleted item ID: ${idToDelete} by user: ${currentUser}`);
                 
@@ -324,3 +304,4 @@ const server = http.createServer((req, res) => {
 server.listen(PORT, () => {
     console.log(`🚀 CampusMarket Engine Live! Run your dashboard at http://localhost:${PORT}/auth.html`);
 });
+
