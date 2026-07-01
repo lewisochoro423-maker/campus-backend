@@ -1,69 +1,39 @@
-<!DOCTYPE html>  <html lang="en">  
+<!DOCTYPE html>  
+<html lang="en">  
 <head>  
     <meta charset="UTF-8">  
     <meta name="viewport" content="width=device-width, initial-scale=1.0">  
     <title>Campus Marketplace & Textbook Exchange</title>  
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>  
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }  
-        /* 'overflow: auto' allows both horizontal and vertical scrolling */
-        html{
-            overflow-x: auto;
-        }
-        body { background-color: #f7f9fa; color: #333; padding-bottom: 80px; min-height: 100vh; overflow-x: auto; 
-        min-width: 800px;}
-          
-        header { background-color: #ffffff; display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }  
-        .logo { font-size: 1.5rem; font-weight: bold; }  
-        .logo span { color: #2abb0d; }  
-        .btn-primary { background-color: #2abb0d; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 6px; font-weight: 600; cursor: pointer; transition: background 0.2s; }  
-        .btn-primary:hover { background-color: #0b0c0c; }  
-        .search-container { text-align: center; padding: 3rem 1rem 2rem 1rem; }  
-        .search-container h1 { margin-bottom: 1.5rem; font-size: 2rem; }  
-        .search-bar { display: flex; justify-content: center; gap: 10px; max-width: 600px; margin: 0 auto; }  
-        .search-bar input, .search-bar select { padding: 0.8rem; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; }  
-        .search-bar input { flex: 2; }  
-        .search-bar select { flex: 1; }  
-        .form-container { max-width: 600px; margin: 0 auto 2rem auto; background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: none; }  
-        .form-container h2 { margin-bottom: 1rem; font-size: 1.25rem; }  
-        .form-group { margin-bottom: 1rem; }  
-        .form-group label { display: block; margin-bottom: 0.3rem; font-weight: 600; font-size: 0.9rem; }  
-        .form-group input, .form-group select { width: 100%; padding: 0.6rem; border: 1px solid #ccc; border-radius: 4px; }  
-        .market-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 25px; padding: 2rem 5%; width: 100%; }  
-        .product-card { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: transform 0.2s; }  
-        .product-card:hover { transform: translateY(-5px); }  
-        .product-image { width: 100%; height: 180px; background-color: #e5e7eb; display: flex; align-items: center; justify-content: center; font-size: 3rem; }  
-        .clickable-image { cursor: pointer; transition: opacity 0.2s; }  
-        .clickable-image:hover { opacity: 0.85; }  
-        .product-info { padding: 1rem; }  
-        .product-price { font-size: 1.25rem; font-weight: bold; color: #171817; margin-bottom: 0.5rem; }  
-        .product-title { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }  
-        .product-location { font-size: 0.85rem; color: #6b7280; }  
-        .btn-delete { background-color: #2abb0d; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.85rem; font-weight: 600; cursor: pointer; margin-top: 0.75rem; width: 100%; }  
-        .btn-delete:hover { background-color: #0e0d0d; }  
+        /* Keeping just a few custom styles for specific elements like the modal */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }  
         .modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.9); backdrop-filter: blur(5px); }  
         .modal-content { margin: auto; display: block; max-width: 90%; max-height: 90vh; margin-top: 5vh; border-radius: 8px; object-fit: contain; }  
         .close-modal { position: absolute; top: 20px; right: 35px; color: #f1f1f1; font-size: 40px; font-weight: bold; cursor: pointer; transition: 0.3s; }  
-        .close-modal:hover, .close-modal:focus { color: #2abb0d; text-decoration: none; cursor: pointer; }  
-        .branding-footer { background-color: #2abb0d; color: white; text-align: center; padding: 1.5rem 1rem; width: 100%; margin-top: 3rem; font-size: 0.9rem; font-weight: 600; line-height: 1.5; }  
-        .branding-footer a { color: white; text-decoration: underline; }
-        .back-to-top { position: fixed; bottom: 20px; right: 20px; background-color: #2abb0d; color: white; border: none; border-radius: 50%; width: 45px; height: 45px; font-size: 1.25rem; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.15); display: none; justify-content: center; align-items: center; z-index: 999; transition: background-color 0.2s, transform 0.2s; }
-        .back-to-top:hover { background-color: #0b0c0c; transform: scale(1.05); }
+        .close-modal:hover { color: #22c55e; }  
+        
+        /* Custom scrollbar to make it look modern */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>  
 </head>  
-<body>  
-    <header>  
-        <div class="logo">🏫 Kibabii<span> CampusMarket</span></div>  
-        <nav style="display: flex; gap: 10px;">
-            <button class="btn-primary" id="toggleFormBtn" data-mode="product">Post an Item</button>
-            <button class="btn-primary" id="toggleServiceBtn" style="background-color: #141616;" data-mode="service">Advertise Service</button>
-        </nav>  
-    </header>
-   <main>  
-        <section class="search-container">  
-            <h1>Find what you need on campus</h1>  
-            <div class="search-bar">  
-                <input type="text" id="searchInput" placeholder="Search textbooks, electronics, locations, professions...">  
-                <select id="categoryFilter">  
+<body class="bg-gray-100 text-gray-800 pt-20 pb-16 min-h-screen">  
+    
+    <header class="fixed top-0 left-0 w-full bg-white shadow-md z-50 px-4 py-4 flex justify-between items-center">  
+        <div class="text-2xl md:text-3xl font-extrabold tracking-tight">🏫 Kibabii<span class="text-green-600"> CampusMarket</span></div>  
+        </header>
+
+   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">  
+        
+        <section class="bg-white rounded-xl shadow-sm p-6 md:p-10 my-6 text-center border border-gray-200">  
+            <h1 class="text-2xl md:text-4xl font-bold mb-6 text-gray-800">Find what you need on campus</h1>  
+            
+            <div class="flex flex-col md:flex-row justify-center gap-3 max-w-3xl mx-auto mb-8">  
+                <input type="text" id="searchInput" class="flex-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 w-full md:w-2/3" placeholder="Search textbooks, electronics, locations...">  
+                <select id="categoryFilter" class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 w-full md:w-1/3 bg-white">  
                     <option value="all">All Categories</option>  
                     <option value="textbooks">Textbooks</option>  
                     <option value="electronics">Electronics</option>  
@@ -72,65 +42,72 @@
                     <option value="clothes">Clothes</option>  
                     <option value="foodstuff">Foodstuff</option>  
                     <option value="services">All Services</option>
-                    <option value="services-plumbing">🔧 Plumbing Services</option>
-                    <option value="services-salon">💇 Salon & Grooming</option>
-                    <option value="services-carpentry">🔨 Carpentry & Repair</option>
-                    <option value="services-tutoring">📚 Tutoring & Academics</option>
-                    <option value="services-tech">💻 Tech & Repair Support</option>
-                    <option value="services-errands">🏃 Errands & Delivery</option>
-                    <option value="services-other">💼 Other Services</option>
                     <option value="other">Other</option>  
                 </select>  
             </div>  
+
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <button class="bg-green-600 text-white font-bold py-3 px-8 rounded-lg shadow hover:bg-green-700 transition w-full sm:w-auto text-lg" id="toggleFormBtn" data-mode="product">📦 Post an Item</button>
+                <button class="bg-black
+            -600 text-white font-bold py-3 px-8 rounded-lg shadow hover:bg-sky-700 transition w-full sm:w-auto text-lg" id="toggleServiceBtn" data-mode="service">💼 Advertise Service</button>
+            </div>
         </section>  
-        <section class="form-container" id="formWrapper">  
-            <h2>List Your Item For Sale</h2>  
-            <form id="itemForm">  
-                <div class="form-group"><label for="itemTitle">Item Title / Name</label><input type="text" id="itemTitle" required placeholder="e.g., Calculus 8th Edition"></div>  
-                <div class="form-group"><label for="itemPrice">Price</label><input type="text" id="itemPrice" required placeholder="e.g., 1,500"></div>  
-                <div class="form-group">  
-                    <label for="itemCategory">Category</label>  
-                    <!-- Options are now dynamically generated by Javascript depending on the mode -->
-                    <select id="itemCategory">  
-                        <option value="textbooks">Textbooks</option>  
-                        <option value="electronics">Electronics</option>  
-                        <option value="housing">Dorm/Hostel Gear</option>  
-                        <option value="furniture">Furniture</option>  
-                        <option value="clothes">Clothes</option>  
-                        <option value="foodstuff">Foodstuff</option>  
-                        <option value="other">Other</option>  
-                    </select>  
+
+        <section class="max-w-2xl mx-auto bg-white p-6 md:p-8 rounded-xl shadow-md border border-gray-200 mb-10 hidden" id="formWrapper">  
+            <h2 class="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">List Your Item For Sale</h2>  
+            <form id="itemForm" class="space-y-4">  
+                <div>
+                    <label for="itemTitle" class="block font-semibold text-gray-700 mb-1">Item Title / Name</label>
+                    <input type="text" id="itemTitle" required placeholder="e.g., Calculus 8th Edition" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 outline-none">
                 </div>  
-                <div class="form-group"><label for="itemLocation">Pickup Location / Hostel</label><input type="text" id="itemLocation" required placeholder="e.g., Hostel A Room 12"></div>  
-                <div class="form-group"><label for="itemImage">Upload Item Photo</label><input type="file" id="itemImage" accept="image/*"></div>  
-                <div class="form-group" style="background: #2abb0d; padding: 1rem; border-radius: 6px; border: 1px solid #bfdbfe; margin-top: 1rem;">  
-                    <p style="font-size: 0.85rem; color: #fff; font-weight: bold; margin-bottom: 0.3rem;">🎁 Your 1st standard listing is 100% FREE!</p>  
-                    <p style="font-size: 0.8rem; color: #fff; margin-bottom: 0.6rem;">Subsequent posts or Premium upgrades require a small fee.</p>  
-                    <div style="margin-bottom: 0.8rem;">  
-                        <label for="mpesaPhone" style="font-size: 0.85rem; color: white;">M-Pesa Phone Number</label>  
-                        <input type="text" id="mpesaPhone" placeholder="0712345678" style="width: 100%; padding: 0.4rem; border: 1px solid #ccc; border-radius: 4px;">  
+                <div>
+                    <label for="itemPrice" class="block font-semibold text-gray-700 mb-1">Price</label>
+                    <input type="text" id="itemPrice" required placeholder="e.g., 1,500" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 outline-none">
+                </div>  
+                <div>  
+                    <label for="itemCategory" class="block font-semibold text-gray-700 mb-1">Category</label>  
+                    <select id="itemCategory" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 outline-none bg-white"></select>  
+                </div>  
+                <div>
+                    <label for="itemLocation" class="block font-semibold text-gray-700 mb-1">Pickup Location / Hostel</label>
+                    <input type="text" id="itemLocation" required placeholder="e.g., Hostel A Room 12" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 outline-none">
+                </div>  
+                <div>
+                    <label for="itemImage" class="block font-semibold text-gray-700 mb-1">Upload Item Photo</label>
+                    <input type="file" id="itemImage" accept="image/*" class="w-full p-2 border border-gray-300 rounded-lg bg-gray-50">
+                </div>  
+                
+                <div class="bg-green-600 p-5 rounded-lg text-white shadow-inner mt-6">  
+                    <p class="font-bold mb-1 text-lg">🎁 Your 1st standard listing is 100% FREE!</p>  
+                    <p class="text-sm text-green-100 mb-4">Subsequent posts or Premium upgrades require a small fee.</p>  
+                    <div class="mb-3">  
+                        <label for="mpesaPhone" class="block text-sm font-medium mb-1">M-Pesa Phone Number</label>  
+                        <input type="text" id="mpesaPhone" placeholder="0712345678" class="w-full p-3 border-none rounded text-gray-800 focus:ring-2 focus:ring-yellow-400 outline-none">  
                     </div>  
-                    <div style="display: flex; align-items: center; gap: 10px; background: #e6e218; padding: 0.5rem; border-radius: 4px;">  
-                        <input type="checkbox" id="premiumCheckbox" style="width: auto; cursor: pointer;">  
-                        <label for="premiumCheckbox" style="margin-bottom: 0; cursor: pointer; font-size: 0.85rem; font-weight: 600;">🔥 Upgrade to Premium Position</label>  
+                    <div class="flex items-center gap-3 bg-yellow-400 text-gray-900 p-3 rounded font-bold">  
+                        <input type="checkbox" id="premiumCheckbox" class="w-5 h-5 cursor-pointer accent-green-700">  
+                        <label for="premiumCheckbox" class="cursor-pointer select-none">🔥 Upgrade to Premium Position</label>  
                     </div>  
                 </div>  
-                <button type="submit" class="btn-primary" style="width: 100%;">Submit Listing</button>  
+                <button type="submit" class="w-full bg-gray-900 hover:bg-black text-white font-bold py-4 rounded-lg shadow-md transition text-lg mt-4">Submit Listing</button>  
             </form>  
         </section>  
-        <section class="market-grid" id="productGrid"></section>  
+
+        <section id="productGrid" class="w-full"></section>  
     </main>  
     
-    <footer class="branding-footer">
-        <p>Made by Lewis Ochoro</p>
-        <p>WhatsApp number: <a href="https://wa.me/254710403679" target="_blank">0710403679</a></p>
+    <footer class="bg-green-600 text-white text-center py-12 mt-20 w-full shadow-inner">
+        <p class="font-bold text-lg mb-1">Made by Lewis Ochoro</p>
+        <p class="opacity-90">WhatsApp number: <a href="https://wa.me/254710403679" target="_blank" class="underline hover:text-green-200">0710403679</a></p>
     </footer>
 
     <div id="imageModal" class="modal">  
         <span class="close-modal">&times;</span>  
         <img class="modal-content" id="enlargedImg">  
     </div>
-    <button class="back-to-top" id="scrollTopBtn" title="Go to top">▲</button>
+
+    <button class="fixed bottom-6 right-6 bg-green-600 text-white border-none rounded-full w-12 h-12 text-xl font-bold cursor-pointer shadow-lg hidden justify-center items-center z-40 hover:bg-black hover:scale-110 transition-all" id="scrollTopBtn" title="Go to top">▲</button>
+
    <script>  
         const productGrid = document.getElementById('productGrid');  
         const formWrapper = document.getElementById('formWrapper');  
@@ -142,7 +119,7 @@
         
         let currentFormMode = 'product'; 
 
-        // Dynamic Categories Configuration
+        // Category configurations
         const productCategories = [
             { value: 'textbooks', text: 'Textbooks' },
             { value: 'electronics', text: 'Electronics' },
@@ -163,78 +140,114 @@
             { value: 'services-other', text: '💼 Other Professional Services' }
         ];
 
-        // Modal Elements  
+        // Pretty display names for the frontend groupings
+        const categoryDisplayNames = {
+            'textbooks': '📚 Textbooks & Study Materials',
+            'electronics': '📱 Electronics & Gadgets',
+            'housing': '🛏️ Dorm & Hostel Gear',
+            'furniture': '🪑 Furniture',
+            'clothes': '👕 Clothes & Fashion',
+            'foodstuff': '🍎 Foodstuff',
+            'services-plumbing': '🔧 Plumbing Services',
+            'services-salon': '💇 Salon & Grooming',
+            'services-carpentry': '🔨 Carpentry & Repair',
+            'services-tutoring': '📚 Tutoring & Academics',
+            'services-tech': '💻 Tech Support',
+            'services-errands': '🏃 Errands & Delivery',
+            'services-other': '💼 Professional Services',
+            'other': '📦 Other Items'
+        };
+
         const modal = document.getElementById("imageModal");  
         const modalImg = document.getElementById("enlargedImg");  
         const closeModalSpan = document.getElementsByClassName("close-modal")[0];  
         
-        // Enforce login  
         if (!activeUserToken) window.location.href = 'auth.html';  
         
-        // 1. Display Products and handle WhatsApp logic  
+        // 1. Group items and display them like a modern E-commerce site
         function displayProducts(items) {  
             productGrid.innerHTML = "";  
             if (!items || items.length === 0) {  
-                productGrid.innerHTML = `<p style="grid-column:1/-1; text-align:center; color:#6b7280; padding:2rem;">No items found.</p>`;  
+                productGrid.innerHTML = `<p class="text-center text-gray-500 py-12 text-lg">No items found on the market right now.</p>`;  
                 return;  
             }  
-            items.forEach(product => {  
-                const card = document.createElement('div');  
-                card.className = 'product-card';  
-                
-                card.setAttribute('data-category', product.category || 'other');
-                  
-                // Clean phone number for WhatsApp  
-                let phone = (product.phone || "254700000000").replace(/\D/g, '');  
-                if (phone.startsWith('0')) phone = '254' + phone.substring(1);  
-                else if (phone.startsWith('7') || phone.startsWith('1')) phone = '254' + phone;  
-                
-                // Format price  
-                const cleanPrice = product.price.toString().replace(/ksh\s*/i, '').trim();  
-                
-                // Set default image icons  
-                const isService = product.category && product.category.startsWith('services-');
-                const defaultEmoji = isService ? '💼' : '📦';
 
-                // Fixed: Utilizing direct URL params (encodeURIComponent) via <a> tag instead of <form>
-                const messageType = isService ? "service" : "item";
-                const waText = encodeURIComponent(`Hi! I saw your ${messageType} (${product.title}) on CampusMarket. Is it still available?`);
+            // Reverse items so the newest are processed first
+            const sortedItems = items.reverse();
+            
+            // Group the items into their specific categories
+            const groupedItems = {};
+            sortedItems.forEach(product => {
+                const cat = product.category || 'other';
+                if (!groupedItems[cat]) groupedItems[cat] = [];
+                groupedItems[cat].push(product);
+            });
 
-                card.innerHTML = `  
-                    ${product.image ? `<img src="${product.image}" class="clickable-image" onclick="openModal('${product.image}')" style="width:100%; height:180px; object-fit:cover;">` : `<div class="product-image">${defaultEmoji}</div>`}  
-                    <div class="product-info">  
-                        <div class="product-price">KSh ${cleanPrice}</div>  
-                        <div class="product-title">${product.title} ${product.isPremium ? '🔥' : ''}</div>  
-                        <div class="product-location">📍 ${product.location}</div>  
-                        <span style="font-size:0.75rem; color:#9ca3af; display:block; margin:0.25rem 0;">Seller: ${product.username || 'unknown'}</span>  
-                        
-                        <a href="https://wa.me/${phone}?text=${waText}" target="_blank" class="btn-primary" style="display:block; text-align:center; text-decoration:none; background-color:#22c55e; margin-top:0.5rem; width:100%;">
-                            💬 Chat on WhatsApp
-                        </a>  
-                        
-                        ${product.username === loggedInUser ? `<button class="btn-delete" onclick="deleteProduct('${product._id}')">Delete Listing</button>` : ''}  
-                    </div>  
-                `;  
-                productGrid.appendChild(card);  
-            });  
+            // Loop through each group and create a Jumia-style section
+            for (const [categoryKey, categoryProducts] of Object.entries(groupedItems)) {
+                
+                const section = document.createElement('div');
+                section.className = 'mb-12 category-section';
+                section.setAttribute('data-category-group', categoryKey);
+
+                // Section Title
+                const sectionTitle = categoryDisplayNames[categoryKey] || categoryKey;
+                section.innerHTML = `<h2 class="text-xl md:text-2xl font-extrabold text-gray-800 mb-4 border-b-4 border-green-500 pb-1 inline-block">${sectionTitle}</h2>`;
+
+                // The strictly formatted grid (2 cols mobile, up to 5 desktop)
+                const grid = document.createElement('div');
+                grid.className = 'grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-5';
+
+                categoryProducts.forEach(product => {  
+                    const card = document.createElement('div');  
+                    // Clean, uniform card styling
+                    card.className = 'product-card bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all border border-gray-200 flex flex-col';  
+                    card.setAttribute('data-category', product.category || 'other');
+                      
+                    let phone = (product.phone || "254700000000").replace(/\D/g, '');  
+                    if (phone.startsWith('0')) phone = '254' + phone.substring(1);  
+                    else if (phone.startsWith('7') || phone.startsWith('1')) phone = '254' + phone;  
+                    
+                    const cleanPrice = product.price.toString().replace(/ksh\s*/i, '').trim();  
+                    const isService = product.category && product.category.startsWith('services-');
+                    const defaultEmoji = isService ? '💼' : '📦';
+                    const messageType = isService ? "service" : "item";
+                    const waText = encodeURIComponent(`Hi! I saw your ${messageType} (${product.title}) on CampusMarket. Is it still available?`);
+
+                    card.innerHTML = `  
+                        <div class="w-full h-32 md:h-48 bg-gray-100 flex items-center justify-center text-4xl cursor-pointer overflow-hidden group">
+                            ${product.image ? `<img src="${product.image}" onclick="openModal('${product.image}')" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">` : `<span>${defaultEmoji}</span>`}  
+                        </div>
+                        <div class="p-3 flex flex-col flex-grow">  
+                            <div class="text-lg md:text-xl font-extrabold text-gray-900 leading-tight truncate">KSh ${cleanPrice}</div>  
+                            <div class="text-sm md:text-base font-semibold text-gray-700 mt-1 truncate" title="${product.title}">${product.title} ${product.isPremium ? '🔥' : ''}</div>  
+                            <div class="text-xs text-gray-500 mt-1 truncate">📍 ${product.location}</div>  
+                            <div class="text-xs text-gray-400 mt-1 truncate">Seller: ${product.username || 'unknown'}</div>  
+                            
+                            <div class="mt-auto pt-3">
+                                <a href="https://wa.me/${phone}?text=${waText}" target="_blank" class="block w-full text-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 rounded-lg transition text-sm">
+                                    💬 Chat
+                                </a>  
+                                ${product.username === loggedInUser ? `<button class="w-full mt-2 bg-red-100 text-red-600 hover:bg-red-200 font-bold py-1.5 rounded-lg text-xs transition" onclick="deleteProduct('${product._id}')">Delete</button>` : ''}  
+                            </div>
+                        </div>  
+                    `;  
+                    grid.appendChild(card);  
+                });  
+                
+                section.appendChild(grid);
+                productGrid.appendChild(section);
+            }
             filterCatalog();
         }  
         
-        // Modal Functions  
         function openModal(imageSrc) {  
             modal.style.display = "block";  
             modalImg.src = imageSrc;  
         }  
-        closeModalSpan.onclick = function() {  
-            modal.style.display = "none";  
-        }  
-        window.onclick = function(event) {  
-            if (event.target == modal) {  
-                modal.style.display = "none";  
-            }  
-        } 
+        closeModalSpan.onclick = function() { modal.style.display = "none"; }  
+        window.onclick = function(event) { if (event.target == modal) modal.style.display = "none"; }  
 
-       // 2. Fetch data  
         function fetchProducts() {  
             fetch('/api/items')  
                 .then(res => res.json())  
@@ -242,7 +255,6 @@
                 .catch(err => console.error("Fetch Error:", err));  
         }  
         
-        // Helper function to handle submission payload  
         function sendPayload(imageData) {  
             const payload = {   
                 title: document.getElementById('itemTitle').value,   
@@ -267,7 +279,6 @@
             .catch(err => alert("Submission failed."));  
         }  
         
-        // 3. Submit Form  
         itemForm.addEventListener('submit', (e) => {  
             e.preventDefault();  
             const file = document.getElementById('itemImage').files[0];  
@@ -302,20 +313,17 @@
             }  
         });  
         
-        // 4. Form Utility Management System  
         function openForm(mode) {
             currentFormMode = mode;
-            formWrapper.style.display = 'block';
+            formWrapper.classList.remove('hidden');
             
-            toggleFormBtn.textContent = 'Post an Item';  
-            toggleFormBtn.style.backgroundColor = '#2abb0d';  
-            toggleServiceBtn.textContent = 'Advertise Service';  
-            toggleServiceBtn.style.backgroundColor = '#0284c7';  
+            toggleFormBtn.innerHTML = 'Cancel';  
+            toggleFormBtn.className = 'bg-red-500 text-white font-bold py-3 px-8 rounded-lg shadow hover:bg-red-600 transition w-full sm:w-auto text-lg';  
+            toggleServiceBtn.style.display = 'none';
 
             const categorySelect = document.getElementById('itemCategory');
-            categorySelect.innerHTML = ''; // Clear current categories entirely
+            categorySelect.innerHTML = ''; 
             
-            // Build strictly relevant dropdown options
             const optionsToLoad = mode === 'product' ? productCategories : serviceCategories;
             optionsToLoad.forEach(cat => {
                 const optEl = document.createElement('option');
@@ -332,9 +340,6 @@
                 document.getElementById('itemPrice').placeholder = 'e.g., 1,500';  
                 document.querySelector('label[for="itemLocation"]').textContent = 'Pickup Location / Hostel';  
                 document.getElementById('itemLocation').placeholder = 'e.g., Hostel A Room 12';  
-                
-                toggleFormBtn.textContent = 'Cancel';  
-                toggleFormBtn.style.backgroundColor = '#dc2626';  
             } else {
                 document.querySelector('#formWrapper h2').textContent = 'Advertise Your Professional Service';  
                 document.querySelector('label[for="itemTitle"]').textContent = 'Profession / Service Name';  
@@ -344,34 +349,34 @@
                 document.querySelector('label[for="itemLocation"]').textContent = 'Service Operation Base / Hostel Room';  
                 document.getElementById('itemLocation').placeholder = 'e.g., Off-Campus, Gate B / Hostel C Room 4';  
                 
-                toggleServiceBtn.textContent = 'Cancel';  
-                toggleServiceBtn.style.backgroundColor = '#dc2626';  
+                toggleFormBtn.style.display = 'none';
+                toggleServiceBtn.style.display = 'block';
+                toggleServiceBtn.innerHTML = 'Cancel';  
+                toggleServiceBtn.className = 'bg-red-500 text-white font-bold py-3 px-8 rounded-lg shadow hover:bg-red-600 transition w-full sm:w-auto text-lg';  
             }
         }
 
         function closeForm() {
-            formWrapper.style.display = 'none';  
+            formWrapper.classList.add('hidden');  
             itemForm.reset();  
-            toggleFormBtn.textContent = 'Post an Item';  
-            toggleFormBtn.style.backgroundColor = '#2abb0d';  
-            toggleServiceBtn.textContent = 'Advertise Service';  
-            toggleServiceBtn.style.backgroundColor = '#0284c7';  
+            
+            toggleFormBtn.style.display = 'block';
+            toggleFormBtn.innerHTML = '📦 Post an Item';  
+            toggleFormBtn.className = 'bg-green-600 text-white font-bold py-3 px-8 rounded-lg shadow hover:bg-green-700 transition w-full sm:w-auto text-lg';  
+            
+            toggleServiceBtn.style.display = 'block';
+            toggleServiceBtn.innerHTML = '💼 Advertise Service';  
+            toggleServiceBtn.className = 'bg-sky-600 text-white font-bold py-3 px-8 rounded-lg shadow hover:bg-sky-700 transition w-full sm:w-auto text-lg';  
         }
 
         toggleFormBtn.addEventListener('click', () => {  
-            if (formWrapper.style.display === 'block' && currentFormMode === 'product') {  
-                closeForm();  
-            } else {  
-                openForm('product');  
-            }  
+            if (!formWrapper.classList.contains('hidden') && currentFormMode === 'product') closeForm();  
+            else openForm('product');  
         });  
 
         toggleServiceBtn.addEventListener('click', () => {  
-            if (formWrapper.style.display === 'block' && currentFormMode === 'service') {  
-                closeForm();  
-            } else {  
-                openForm('service');  
-            }  
+            if (!formWrapper.classList.contains('hidden') && currentFormMode === 'service') closeForm();  
+            else openForm('service');  
         });  
         
         function deleteProduct(id) {  
@@ -381,7 +386,6 @@
             }  
         }  
         
-        // 5. Intelligent Dynamic Frontend Search Filtering System  
         const searchInput = document.getElementById('searchInput');
         const categoryFilter = document.getElementById('categoryFilter');
 
@@ -390,41 +394,37 @@
             const selectedCategory = categoryFilter.value;
             const allProductCards = document.querySelectorAll('.product-card');
 
+            // Hide/Show individual cards
             allProductCards.forEach(card => {
-                const titleText = card.querySelector('.product-title').textContent.toLowerCase();
-                const locationText = card.querySelector('.product-location').textContent.toLowerCase();
+                const textContent = card.innerText.toLowerCase();
                 const cardCategory = card.getAttribute('data-category') || '';
 
-                const matchesSearch = titleText.includes(searchWord) || locationText.includes(searchWord);
-                
+                const matchesSearch = textContent.includes(searchWord);
                 let matchesCategory = false;
-                if (selectedCategory === 'all') {
-                    matchesCategory = true;
-                } else if (selectedCategory === 'services') {
-                    matchesCategory = cardCategory.startsWith('services-');
-                } else {
-                    matchesCategory = (cardCategory === selectedCategory);
-                }
+                
+                if (selectedCategory === 'all') matchesCategory = true;
+                else if (selectedCategory === 'services') matchesCategory = cardCategory.startsWith('services-');
+                else matchesCategory = (cardCategory === selectedCategory);
 
-                if (matchesSearch && matchesCategory) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
+                if (matchesSearch && matchesCategory) card.style.display = 'flex';
+                else card.style.display = 'none';
+            });
+
+            // Hide/Show entire category rows if they are empty
+            document.querySelectorAll('.category-section').forEach(section => {
+                const visibleCards = section.querySelectorAll('.product-card[style="display: flex;"]');
+                if(visibleCards.length === 0) section.style.display = 'none';
+                else section.style.display = 'block';
             });
         }
 
         searchInput.addEventListener('input', filterCatalog);
         categoryFilter.addEventListener('change', filterCatalog);
 
-        // 6. Floating Back to Top Navigation Interface  
         const scrollTopBtn = document.getElementById('scrollTopBtn');
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 300) {
-                scrollTopBtn.style.display = 'flex';
-            } else {
-                scrollTopBtn.style.display = 'none';
-            }
+            if (window.scrollY > 300) scrollTopBtn.style.display = 'flex';
+            else scrollTopBtn.style.display = 'none';
         });
         scrollTopBtn.addEventListener('click', () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
