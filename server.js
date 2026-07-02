@@ -9,7 +9,8 @@ const PORT = process.env.PORT || 5000;
 // =========================================================================
 // MONGODB CONNECTION SETUP
 // =========================================================================
-const MONGO_URI = process.env.MONGO_URL || process.env.MONGODB_URI || process.env.MONGO_URI ||"mongodb+srv://lewisochoro423_db_user:lewis10278@campusmarketcluster.xrxnsct.mongodb.net/?appName=CampusmarketCluster";
+// 🔌 Added 'CampusMarket' right before the '?' to force connection to your actual data
+const MONGO_URI = process.env.MONGO_URL || process.env.MONGODB_URI || process.env.MONGO_URI ||"mongodb+srv://lewisochoro423_db_user:lewis10278@campusmarketcluster.xrxnsct.mongodb.net/CampusMarket?appName=CampusmarketCluster";
 mongoose.connect(MONGO_URI)
     .then(() => console.log("🔌 Connected to MongoDB Atlas successfully!"))
     .catch(err => console.error("❌ MongoDB connection failure:", err));
@@ -166,7 +167,10 @@ const server = http.createServer((req, res) => {
                 const allUsers = await User.find({}, 'username phone');
                 const userPhoneMap = {};
                 allUsers.forEach(u => {
-                    userPhoneMap[u.username.toLowerCase()] = u.phone;
+                    // 🛡️ Added a safety check: Only convert to lowercase if the username actually exists
+                    if (u.username) {
+                        userPhoneMap[u.username.toLowerCase()] = u.phone;
+                    }
                 });
 
                 // Map items instantly out of the memory table
@@ -188,6 +192,8 @@ const server = http.createServer((req, res) => {
                 res.writeHead(200, { 'Content-Type': 'application/json' });
                 res.end(JSON.stringify({ success: true, items: enrichedItems }));
             } catch (err) {
+                // 🚨 This will print the EXACT error in your terminal so you aren't guessing
+                console.error("❌ CRASH IN GET /api/items:", err); 
                 res.writeHead(500, { 'Content-Type': 'application/json' });
                 res.end(JSON.stringify({ success: false, message: "Error fetching catalog rows." }));
             }
@@ -199,7 +205,7 @@ const server = http.createServer((req, res) => {
     // =========================================================================
     if (pathname === '/api/items' && req.method === 'POST') {
         const authHeader = req.headers['authorization'];
-        const currentUser = authHeader && authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : null; // FIX: Restored [1] index string splitter placement safely
+        const currentUser = authHeader && authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : null; 
         if (!currentUser) {
             res.writeHead(401, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ success: false, message: "Unauthorized! Missing user session token." }));
@@ -265,7 +271,7 @@ const server = http.createServer((req, res) => {
     // =========================================================================
     if (pathname.startsWith('/api/items') && req.method === 'DELETE') {
         const authHeader = req.headers['authorization'];
-        const currentUser = authHeader && authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : null; // FIX: Restored [1] index string splitter placement safely
+        const currentUser = authHeader && authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : null; 
         const idToDelete = parsedUrl.searchParams.get('id'); 
         (async () => {
             try {
@@ -304,4 +310,3 @@ const server = http.createServer((req, res) => {
 server.listen(PORT, () => {
     console.log(`🚀 CampusMarket Engine Live! Run your dashboard at http://localhost:${PORT}/auth.html`);
 });
-
